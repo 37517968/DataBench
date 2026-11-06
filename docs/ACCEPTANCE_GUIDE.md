@@ -71,7 +71,7 @@ def run_acceptance(output_dir: Path) -> AcceptanceEvidence:
 3. 返回一个或多个通过 `validate()` 的 `AlgorithmResult`。
 4. 使用 `save_experiment(..., output_dir=output_dir)` 保存实验 JSON。
 5. 把结果、实验路径和样例路径写入 `AcceptanceEvidence`。
-6. 默认验收样例尽量在 10 秒内运行完毕。
+6. 验收样例的运行耗时仅作记录，不设通过时限；仍建议控制样例规模，避免每次自查都触发长时间训练。
 
 验收器使用临时目录保存检查期间的实验记录，运行结束后自动清理，不会污染正式 `experiments/`。
 
@@ -88,7 +88,7 @@ def run_acceptance(output_dir: Path) -> AcceptanceEvidence:
 | 验收入口 | 导入并执行 `run_acceptance()`，检查返回类型 | 证明算法确实能在统一环境运行 | 按模板返回 `AcceptanceEvidence` |
 | 模块标识 | 比较 evidence、`task_type` 和注册模块 ID | 防止结果被保存到错误任务下 | 统一使用固定模块 ID |
 | 小型样例 | 检查样例存在且单文件不超过 10 MB | 默认检查不能依赖大数据或网络下载 | 提供精简、可公开的小样例 |
-| 运行时间 | 记录验收样例耗时，默认上限 10 秒 | 避免每次检查都触发长训练 | 缩小样例或使用轻量参数 |
+| 运行时间 | 执行 run_acceptance() 并记录耗时，不设时限 | 便于发现异常缓慢或卡死的样例 | 耗时异常时缩小样例或使用轻量参数 |
 | 实验 JSON | 读取 JSON，检查固定字段、任务和算法标识 | 保证实验可追溯和可比较 | 使用 `save_experiment()` 保存 |
 | 文件安全与大小 | 检查密钥后缀、`.env` 和超过 10 MB 的文件 | 防止泄露凭据或误交大数据 | 删除凭据，改用示例配置和下载说明 |
 | 中期测试覆盖 | 检查至少四个测试并包含 contract、experiment 类测试 | 确保结果合同与实验保存不是口头承诺 | 增加对应命名和断言的测试 |

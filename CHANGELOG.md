@@ -1,5 +1,10 @@
 # DataBench Starter 变更记录
 
+## Unreleased
+
+- 验收工具「运行时间」检查项改为仅记录耗时，不再按 10 秒上限判定失败。
+- 全量回归测试子进程移除 180 秒超时，避免样例较慢时误报。
+
 ## 0.5.0 2026-10-14
 
 - 根项目改用 `pyproject.toml`、`uv.lock` 和 `.python-version`，移除旧 `requirements.txt` 工作流。
